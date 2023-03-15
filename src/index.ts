@@ -1,5 +1,5 @@
 import type { Record } from './types';
-import env from './env.js';
+import env from './env';
 import { log } from './utils';
 
 async function getPublicIp() {
@@ -27,7 +27,7 @@ async function getDNSRecords() {
 		log({
 			status: 'SUCCESS',
 			function: 'getDNSRecords',
-			record: data.records
+			data: data.records
 				.filter((r) => env.subdomains.includes(r.name))
 				.map((r) => r.name)
 				.join(', '),
@@ -78,7 +78,7 @@ async function createDNSRecord(name: string, value: string) {
 		});
 
 		const data = await res.json();
-		log({ status: 'SUCCESS', function: 'createDNSRecord', record: name });
+		log({ status: 'SUCCESS', function: 'createDNSRecord', data });
 		return data;
 	} catch (error) {
 		log({ status: 'ERROR', function: 'createDNSRecord', record: name, error });

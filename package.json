@@ -1,7 +1,6 @@
 {
 	"name": "vercel-ddns",
 	"version": "1.0.0",
-	"type": "module",
 	"scripts": {
 		"build": "tsc",
 		"start": "node build/index.js"
