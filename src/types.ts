@@ -13,3 +13,11 @@ export type Record = {
 	updatedAt: number | null;
 	ttl: number;
 };
+
+export type ConsoleError = {
+	status: 'SUCCESS' | 'ERROR';
+	function: string;
+	record?: string;
+	data?: unknown;
+	error?: unknown;
+};

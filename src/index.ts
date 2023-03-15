@@ -1,10 +1,17 @@
-import { env } from 'env';
 import type { Record } from './types';
+import env from './env.js';
+import { log } from './utils';
 
 async function getPublicIp() {
-	const res = await fetch('https://api.ipify.org');
-	const data = await res.text();
-	return data;
+	try {
+		const res = await fetch('https://api.ipify.org');
+		const data = await res.text();
+		log({ status: 'SUCCESS', function: 'getPublicIp', data });
+		return data;
+	} catch (error) {
+		log({ status: 'ERROR', function: 'getPublicIp', error });
+		throw 'Error retrieving public IP';
+	}
 }
 
 async function getDNSRecords() {
@@ -17,10 +24,17 @@ async function getDNSRecords() {
 		});
 
 		const data = (await res.json()) as { records: Record[] };
-		console.log('SUCCESS: getDNSRecords', data.records.map((r) => r.name).concat(', '));
+		log({
+			status: 'SUCCESS',
+			function: 'getDNSRecords',
+			record: data.records
+				.filter((r) => env.subdomains.includes(r.name))
+				.map((r) => r.name)
+				.join(', '),
+		});
 		return data.records;
 	} catch (error) {
-		console.error('ERROR: getDNSRecords', error);
+		log({ status: 'ERROR', function: 'getDNSRecords', error });
 	}
 }
 
@@ -29,7 +43,7 @@ async function updateDNSRecord(record: Record, publicIp: string) {
 		const res = await fetch(`https://api.vercel.com/v1/domains/records/${record.id}`, {
 			body: JSON.stringify({
 				name: record.name,
-				ttl: '60',
+				ttl: 60,
 				type: 'A',
 				value: publicIp,
 			}),
@@ -41,9 +55,9 @@ async function updateDNSRecord(record: Record, publicIp: string) {
 		});
 
 		const data = (await res.json()) as Record;
-		console.log('SUCCESS: updateDNSRecord', { name: data.name, value: data.value });
+		log({ status: 'SUCCESS', function: 'updateDNSRecord', record: data.name, data });
 	} catch (error) {
-		console.error('ERROR: updateDNSRecord', error);
+		log({ status: 'ERROR', function: 'updateDNSRecord', record: record.name, error });
 	}
 }
 
@@ -64,18 +78,15 @@ async function createDNSRecord(name: string, value: string) {
 		});
 
 		const data = await res.json();
-		console.log(data);
-		console.log('SUCCESS: createDNSRecord', { name: data.name, value: data.value });
+		log({ status: 'SUCCESS', function: 'createDNSRecord', record: name });
 		return data;
 	} catch (error) {
-		console.error('ERROR: createDNSRecord', error);
+		log({ status: 'ERROR', function: 'createDNSRecord', record: name, error });
 	}
 }
 
 async function main() {
 	const publicIp = await getPublicIp();
-	console.log({ publicIp });
-
 	const records = await getDNSRecords();
 
 	env.subdomains.forEach(async (subdomain) => {
@@ -86,3 +97,4 @@ async function main() {
 }
 
 main();
+setInterval(main, 1000 * 60 * 30); //30 min interval

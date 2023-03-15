@@ -1,4 +1,7 @@
 import { z } from 'zod';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 const envSchema = z.object({
 	vercelApiKey: z.string(),
@@ -6,8 +9,13 @@ const envSchema = z.object({
 	subdomains: z.array(z.string()),
 });
 
-export const env = envSchema.parse({
+console.log('Domain', process.env.DOMAIN);
+console.log('Subdomains', process.env.SUBDOMAINS?.split(', '));
+
+const env = envSchema.parse({
 	vercelApiKey: process.env.VERCEL_API_KEY,
 	domain: process.env.DOMAIN,
 	subdomains: process.env.SUBDOMAINS?.split(', '),
 });
+
+export default env;
