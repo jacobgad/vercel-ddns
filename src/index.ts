@@ -43,9 +43,9 @@ async function updateDNSRecord(record: Record, publicIp: string) {
 		const res = await fetch(`https://api.vercel.com/v1/domains/records/${record.id}`, {
 			body: JSON.stringify({
 				name: record.name,
-				ttl: 60,
 				type: 'A',
 				value: publicIp,
+				ttl: 60,
 			}),
 			headers: {
 				Authorization: `Bearer ${env.vercelApiKey}`,
@@ -67,8 +67,8 @@ async function createDNSRecord(name: string, value: string) {
 			body: JSON.stringify({
 				name,
 				type: 'A',
-				ttl: 60,
 				value,
+				ttl: 60,
 			}),
 			headers: {
 				Authorization: `Bearer ${env.vercelApiKey}`,
