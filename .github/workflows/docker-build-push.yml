@@ -1,0 +1,16 @@
+on:
+  release:
+    types: [published]
+
+name: docker-build-push
+
+jobs:
+  docker-build-push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: mr-smithers-excellent/docker-build-push@v6
+        with:
+          image: jacobgad/vercel-ddns
+          registry: docker.io
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
