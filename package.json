@@ -2,8 +2,8 @@
 	"name": "vercel-ddns",
 	"version": "1.0.0",
 	"scripts": {
-		"build": "tsc",
-		"start": "node build/index.js"
+		"build": "rm -r dist && tsc",
+		"start": "node dist/index.js"
 	},
 	"devDependencies": {
 		"@types/node": "^18.15.3",

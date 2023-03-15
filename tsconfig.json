@@ -13,7 +13,7 @@
 		"isolatedModules": true,
 		"incremental": true,
 		"noUncheckedIndexedAccess": true,
-		"outDir": "./build",
+		"outDir": "./dist",
 		"baseUrl": "./src"
 	},
 	"include": ["src/**/*.ts"],
