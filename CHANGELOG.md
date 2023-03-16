@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.1](https://github.com/jacobgad/vercel-ddns/compare/v1.2.0...v1.2.1) (2023-03-16)
+
+
+### Bug Fixes
+
+* :bug: format utils file and add comments ([5fae8a7](https://github.com/jacobgad/vercel-ddns/commit/5fae8a71cb27c1fc6c2e5e6e7028a03d96c126b5))
+
 ## [1.2.0](https://github.com/jacobgad/vercel-ddns/compare/v1.1.0...v1.2.0) (2023-03-16)
 
 
