@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/jacobgad/vercel-ddns/compare/v1.3.0...v1.4.0) (2023-03-16)
+
+
+### Features
+
+* :sparkles: fix update logic and refactor to use axios ([073f648](https://github.com/jacobgad/vercel-ddns/commit/073f648f46d362178d1187e3592bed37b23c6f64))
+
 ## [1.3.0](https://github.com/jacobgad/vercel-ddns/compare/v1.2.1...v1.3.0) (2023-03-16)
 
 
