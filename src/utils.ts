@@ -11,15 +11,16 @@ export function log(props: ConsoleError) {
 }
 
 export function retry<T>(func: () => Promise<T>, attempt = 0): Promise<T> {
-	return new Promise((resolve) =>
-		setTimeout(async () => {
-			try {
-				const value = await func();
-				resolve(value);
-			} catch (error) {
-				console.error('ERROR: attempt', attempt, '->', func.name, error);
-				resolve(retry(func, attempt + 1));
-			}
-		}, 1000 * 10)
+	return new Promise(
+		(resolve) =>
+			setTimeout(async () => {
+				try {
+					const value = await func();
+					resolve(value);
+				} catch (error) {
+					console.error('ERROR: attempt', attempt, '->', func.name, error);
+					resolve(retry(func, attempt + 1));
+				}
+			}, 1000 * 10) //10 seconds
 	);
 }
