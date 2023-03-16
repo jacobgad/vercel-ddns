@@ -1,7 +1,7 @@
 import type { Record } from './schemas';
 import { recordSchema } from './schemas';
 import env from './env';
-import { log } from './utils';
+import { log, retry } from './utils';
 import { z } from 'zod';
 
 async function getPublicIp() {
@@ -95,13 +95,13 @@ async function createDNSRecord(name: string, value: string) {
 }
 
 async function main() {
-	const publicIp = await getPublicIp();
-	const records = await getDNSRecords();
+	const publicIp = await retry(getPublicIp);
+	const records = await retry(getDNSRecords);
 
 	env.subdomains.forEach(async (subdomain) => {
 		const record = records?.find((record) => record.name === subdomain);
-		if (!record) await createDNSRecord(subdomain, publicIp);
-		if (record && record.value !== publicIp) updateDNSRecord(record, publicIp);
+		if (!record) await retry(() => createDNSRecord(subdomain, publicIp));
+		if (record && record.value !== publicIp) await retry(() => updateDNSRecord(record, publicIp));
 	});
 }
 
