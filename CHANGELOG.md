@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.0](https://github.com/jacobgad/vercel-ddns/compare/v1.4.2...v1.5.0) (2023-03-16)
+
+
+### Features
+
+* :sparkles: Add retry logic and error handeling ([06990c2](https://github.com/jacobgad/vercel-ddns/commit/06990c26beacf93e16a1e4a9f8bbfb06e0b68996))
+
 ## [1.4.2](https://github.com/jacobgad/vercel-ddns/compare/v1.4.1...v1.4.2) (2023-03-16)
 
 
