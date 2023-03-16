@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.2](https://github.com/jacobgad/vercel-ddns/compare/v1.4.1...v1.4.2) (2023-03-16)
+
+
+### Bug Fixes
+
+* :bug: remove double up in docker action ([2a380b5](https://github.com/jacobgad/vercel-ddns/commit/2a380b5c078284eea6e37c7f26714f4d7f194432))
+
 ## [1.4.1](https://github.com/jacobgad/vercel-ddns/compare/v1.4.0...v1.4.1) (2023-03-16)
 
 
