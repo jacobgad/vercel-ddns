@@ -18,7 +18,7 @@ export function retry<T>(func: () => Promise<T>, attempt = 0): Promise<T> {
 					const value = await func();
 					resolve(value);
 				} catch (error) {
-					console.error('ERROR: attempt', attempt, '->', func.name, error);
+					console.error('ERROR:', func.name, 'attempt', attempt, '->', error);
 					resolve(retry(func, attempt + 1));
 				}
 			}, 1000 * 10) //10 seconds

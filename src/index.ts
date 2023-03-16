@@ -1,97 +1,81 @@
 import type { Record } from './schemas';
 import { recordSchema } from './schemas';
-import env from './env';
 import { log, retry } from './utils';
+import env from './env';
 import { z } from 'zod';
 
 async function getPublicIp() {
-	try {
-		const res = await fetch('https://api.ipify.org');
-		if (!res.ok) throw new Error(res.statusText);
+	const res = await fetch('https://api.ipify.org');
+	if (!res.ok) throw new Error(res.statusText);
 
-		const data = await res.text();
-		log({ status: 'SUCCESS', function: 'getPublicIp', data });
-		return data;
-	} catch (error) {
-		log({ status: 'ERROR', function: 'getPublicIp', error });
-		throw 'Error retrieving public IP';
-	}
+	const data = await res.text();
+	log({ status: 'SUCCESS', function: 'getPublicIp', data });
+	return data;
 }
 
 async function getDNSRecords() {
-	try {
-		const res = await fetch(`https://api.vercel.com/v4/domains/${env.domain}/records`, {
-			headers: {
-				Authorization: `Bearer ${env.vercelApiKey}`,
-			},
-			method: 'get',
-		});
-		if (!res.ok) throw new Error(res.statusText);
+	const res = await fetch(`https://api.vercel.com/v4/domains/${env.domain}/records`, {
+		headers: {
+			Authorization: `Bearer ${env.vercelApiKey}`,
+		},
+		method: 'get',
+	});
+	if (!res.ok) throw new Error(res.statusText);
 
-		const data = await res.json();
-		const records = z.array(recordSchema).parse(data.records);
+	const data = await res.json();
+	const records = z.array(recordSchema).parse(data.records);
 
-		log({
-			status: 'SUCCESS',
-			function: 'getDNSRecords',
-			data: records
-				.filter((r) => env.subdomains.includes(r.name))
-				.map((r) => r.name)
-				.join(', '),
-		});
-		return records;
-	} catch (error) {
-		log({ status: 'ERROR', function: 'getDNSRecords', error });
-	}
+	log({
+		status: 'SUCCESS',
+		function: 'getDNSRecords',
+		data: records
+			.filter((r) => env.subdomains.includes(r.name))
+			.map((r) => r.name)
+			.join(', '),
+	});
+	log({ status: 'SUCCESS', function: 'getDNSRecords', record: data.name, data });
+	return records;
 }
 
 async function updateDNSRecord(record: Record, publicIp: string) {
-	try {
-		const res = await fetch(`https://api.vercel.com/v1/domains/records/${record.id}`, {
-			body: JSON.stringify({
-				name: record.name,
-				type: 'A',
-				value: publicIp,
-				ttl: 60,
-			}),
-			headers: {
-				Authorization: `Bearer ${env.vercelApiKey}`,
-				'Content-Type': 'application/json',
-			},
-			method: 'patch',
-		});
-		if (!res.ok) throw new Error(res.statusText);
+	const res = await fetch(`https://api.vercel.com/v1/domains/records/${record.id}`, {
+		body: JSON.stringify({
+			name: record.name,
+			type: 'A',
+			value: publicIp,
+			ttl: 60,
+		}),
+		headers: {
+			Authorization: `Bearer ${env.vercelApiKey}`,
+			'Content-Type': 'application/json',
+		},
+		method: 'patch',
+	});
+	if (!res.ok) throw new Error(res.statusText);
 
-		const data = recordSchema.parse(await res.json());
-		log({ status: 'SUCCESS', function: 'updateDNSRecord', record: data.name, data });
-	} catch (error) {
-		log({ status: 'ERROR', function: 'updateDNSRecord', record: record.name, error });
-	}
+	const data = recordSchema.parse(await res.json());
+	log({ status: 'SUCCESS', function: 'updateDNSRecord', record: data.name, data });
 }
 
 async function createDNSRecord(name: string, value: string) {
-	try {
-		const res = await fetch(`https://api.vercel.com/v2/domains/${env.domain}/records`, {
-			body: JSON.stringify({
-				name,
-				type: 'A',
-				value,
-				ttl: 60,
-			}),
-			headers: {
-				Authorization: `Bearer ${env.vercelApiKey}`,
-				'Content-Type': 'application/json',
-			},
-			method: 'post',
-		});
-		if (!res.ok) throw new Error(res.statusText);
+	const res = await fetch(`https://api.vercel.com/v2/domains/${env.domain}/records`, {
+		body: JSON.stringify({
+			name,
+			type: 'A',
+			value,
+			ttl: 60,
+		}),
+		headers: {
+			Authorization: `Bearer ${env.vercelApiKey}`,
+			'Content-Type': 'application/json',
+		},
+		method: 'post',
+	});
+	if (!res.ok) throw new Error(res.statusText);
 
-		const data = await res.json();
-		log({ status: 'SUCCESS', function: 'createDNSRecord', data });
-		return data;
-	} catch (error) {
-		log({ status: 'ERROR', function: 'createDNSRecord', record: name, error });
-	}
+	const data = await res.json();
+	log({ status: 'SUCCESS', function: 'createDNSRecord', data });
+	return data;
 }
 
 async function main() {
