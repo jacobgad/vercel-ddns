@@ -18,17 +18,15 @@ export function log(props: ConsoleError) {
 	}
 }
 
-export function retry<T>(func: () => Promise<T>, attempt = 0): Promise<T> {
-	return new Promise(
-		(resolve) =>
-			setTimeout(async () => {
-				try {
-					const value = await func();
-					resolve(value);
-				} catch (error) {
-					console.error('ERROR:', func.name, 'attempt', attempt, '->', error);
-					resolve(retry(func, attempt + 1));
-				}
-			}, 1000 * 10) //10 seconds
-	);
+export function retry<T>(func: () => Promise<T>, maxAttempt = 3, currentAttempt = 1): Promise<T> {
+	return new Promise(async (resolve, reject) => {
+		try {
+			const value = await func();
+			resolve(value);
+		} catch (error) {
+			console.error('ERROR:', func.name, 'attempt', currentAttempt, '->', error);
+			if (currentAttempt >= maxAttempt) return reject(error);
+			resolve(retry(func, maxAttempt, currentAttempt + 1));
+		}
+	});
 }
