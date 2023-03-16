@@ -1,5 +1,13 @@
 /* eslint-disable no-console */
+import axios from 'axios';
 import type { ConsoleError } from './schemas';
+import env from './env';
+
+export const vercelAxios = axios.create({
+	baseURL: 'https://api.vercel.com/',
+	timeout: 10000,
+	headers: { Authorization: `Bearer ${env.vercelApiKey}` },
+});
 
 export function log(props: ConsoleError) {
 	if (props.status === 'SUCCESS') {
