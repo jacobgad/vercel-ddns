@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import type { ConsoleError } from './types';
+import type { ConsoleError } from './schemas';
 
 export function log(props: ConsoleError) {
 	if (props.status === 'SUCCESS') {

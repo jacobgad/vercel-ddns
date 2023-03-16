@@ -1,10 +1,14 @@
-import type { Record } from './types';
+import type { Record } from './schemas';
+import { recordSchema } from './schemas';
 import env from './env';
 import { log } from './utils';
+import { z } from 'zod';
 
 async function getPublicIp() {
 	try {
 		const res = await fetch('https://api.ipify.org');
+		if (!res.ok) throw new Error(res.statusText);
+
 		const data = await res.text();
 		log({ status: 'SUCCESS', function: 'getPublicIp', data });
 		return data;
@@ -22,17 +26,20 @@ async function getDNSRecords() {
 			},
 			method: 'get',
 		});
+		if (!res.ok) throw new Error(res.statusText);
 
-		const data = (await res.json()) as { records: Record[] };
+		const data = await res.json();
+		const records = z.array(recordSchema).parse(data.records);
+
 		log({
 			status: 'SUCCESS',
 			function: 'getDNSRecords',
-			data: data.records
+			data: records
 				.filter((r) => env.subdomains.includes(r.name))
 				.map((r) => r.name)
 				.join(', '),
 		});
-		return data.records;
+		return records;
 	} catch (error) {
 		log({ status: 'ERROR', function: 'getDNSRecords', error });
 	}
@@ -53,8 +60,9 @@ async function updateDNSRecord(record: Record, publicIp: string) {
 			},
 			method: 'patch',
 		});
+		if (!res.ok) throw new Error(res.statusText);
 
-		const data = (await res.json()) as Record;
+		const data = recordSchema.parse(await res.json());
 		log({ status: 'SUCCESS', function: 'updateDNSRecord', record: data.name, data });
 	} catch (error) {
 		log({ status: 'ERROR', function: 'updateDNSRecord', record: record.name, error });
@@ -76,6 +84,7 @@ async function createDNSRecord(name: string, value: string) {
 			},
 			method: 'post',
 		});
+		if (!res.ok) throw new Error(res.statusText);
 
 		const data = await res.json();
 		log({ status: 'SUCCESS', function: 'createDNSRecord', data });
