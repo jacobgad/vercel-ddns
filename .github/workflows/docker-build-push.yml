@@ -1,9 +1,6 @@
 on:
-  push:
-    branches:
-      - main
-    tags:
-      - "v*"
+  release:
+    types: [published]
 
 name: docker-build-push
 
@@ -11,6 +8,9 @@ jobs:
   docker-build-push:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
+        name: Check out code
+
       - uses: mr-smithers-excellent/docker-build-push@v6
         with:
           image: jacobgad/vercel-ddns
