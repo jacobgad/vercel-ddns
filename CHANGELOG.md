@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/jacobgad/vercel-ddns/compare/v1.1.0...v1.2.0) (2023-03-16)
+
+
+### Features
+
+* :sparkles: add retry logic of async calls ([3caba0b](https://github.com/jacobgad/vercel-ddns/commit/3caba0b5df917d5fc0620dccbc0459275b4b19ec))
+
 ## [1.1.0](https://github.com/jacobgad/vercel-ddns/compare/v1.0.0...v1.1.0) (2023-03-16)
 
 
