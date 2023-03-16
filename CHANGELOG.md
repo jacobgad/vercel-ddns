@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.2](https://github.com/jacobgad/vercel-ddns/compare/v1.2.1...v1.2.2) (2023-03-16)
+
+
+### Bug Fixes
+
+* :bug: fix docker github action ([4f3247e](https://github.com/jacobgad/vercel-ddns/commit/4f3247e15245bb4ab01a66c6bdbd9fa596d3652c))
+
 ## [1.2.1](https://github.com/jacobgad/vercel-ddns/compare/v1.2.0...v1.2.1) (2023-03-16)
 
 
