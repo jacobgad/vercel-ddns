@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.1](https://github.com/jacobgad/vercel-ddns/compare/v1.4.0...v1.4.1) (2023-03-16)
+
+
+### Bug Fixes
+
+* :bug: update CICD relase-please to use gitub token ([aef698f](https://github.com/jacobgad/vercel-ddns/commit/aef698f3bfaff5361a8c7e49aeb8d329eb5a0685))
+
 ## [1.4.0](https://github.com/jacobgad/vercel-ddns/compare/v1.3.0...v1.4.0) (2023-03-16)
 
 
