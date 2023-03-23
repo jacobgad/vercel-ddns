@@ -1,5 +1,10 @@
 name: 'CI'
 
+env:
+  VERCEL_API_KEY: 'xxxxxxxxxx'
+  DOMAIN: 'example.com',
+  SUBDOMAINS: 'foo, bar'
+
 on: push
 
 jobs:
