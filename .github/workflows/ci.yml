@@ -2,6 +2,11 @@ name: 'CI'
 
 on: push
 
+env:
+  VERCEL_API_KEY: xxxxxxxxxx
+  DOMAIN: example.com
+  SUBDOMAINS: foo, bar
+
 jobs:
   tests:
     runs-on: ubuntu-latest
