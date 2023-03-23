@@ -1,15 +1,18 @@
 /* eslint-disable no-console */
+import { describe, it, expect } from 'vitest';
 import { retry } from './utils';
 
-function getValue() {
-	return new Promise<string>((resolve, reject) =>
-		Math.random() < 0 ? resolve('SUCCESS') : reject('ERROR')
-	);
-}
+describe('Retry async function logic', () => {
+	function getValue(success = true) {
+		return new Promise((resolve, reject) => (success ? resolve('SUCCESS') : reject('ERROR')));
+	}
 
-async function printValue() {
-	const value = await retry(getValue);
-	console.log(value);
-}
+	it('Should return success on first try if success', async () => {
+		const value = await retry(getValue);
+		expect(value).toBe('SUCCESS');
+	});
 
-printValue();
+	it('Should return error if it fails 3 times', async () => {
+		await expect(retry(() => getValue(false))).rejects.toEqual('ERROR');
+	});
+});
