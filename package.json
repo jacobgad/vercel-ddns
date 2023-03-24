@@ -5,6 +5,7 @@
 		"build": "tsc",
 		"start": "node dist/index.js",
 		"test": "vitest run",
+		"typecheck": "tsc --noEmit",
 		"lint": "eslint .",
 		"format:check": "prettier --check ."
 	},
