@@ -1,6 +1,5 @@
 import { z } from 'zod';
 
-export type ConsoleError = z.infer<typeof consoleErrorSchema>;
 export type Record = z.infer<typeof recordSchema>;
 
 const dnsRecordType = z.union([
@@ -14,14 +13,6 @@ const dnsRecordType = z.union([
 	z.literal('TXT'),
 	z.literal('NS'),
 ]);
-
-export const consoleErrorSchema = z.object({
-	status: z.union([z.literal('SUCCESS'), z.literal('ERROR')]),
-	function: z.string(),
-	record: z.string().optional(),
-	data: z.unknown().optional(),
-	error: z.unknown().optional(),
-});
 
 export const recordSchema = z.object({
 	id: z.string(),
