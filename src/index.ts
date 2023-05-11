@@ -1,16 +1,17 @@
 import type { Record } from './schemas';
 import { updatedDNSRecordSchema, createdDNSRecord } from './schemas';
 import { recordSchema } from './schemas';
-import { log, retry, vercelAxios } from './utils';
+import { retry, vercelAxios } from './utils';
 import env from './env';
 import { z } from 'zod';
+import logger from './logger';
 
 async function getPublicIp() {
 	const res = await fetch('https://api.ipify.org');
 	if (!res.ok) throw new Error(res.statusText);
 
 	const data = await res.text();
-	log({ status: 'SUCCESS', function: 'getPublicIp', data });
+	logger.info(data, 'Get Public Ip');
 	return data;
 }
 
@@ -18,14 +19,12 @@ async function getDNSRecords() {
 	const res = await vercelAxios.get(`v4/domains/${env.domain}/records`);
 	const records = z.array(recordSchema).parse(res.data.records);
 
-	log({
-		status: 'SUCCESS',
-		function: 'getDNSRecords',
-		data: records
-			.filter((r) => env.subdomains.includes(r.name))
-			.map((r) => r.name)
-			.join(', '),
-	});
+	const filteredRecordsString = records
+		.filter((r) => env.subdomains.includes(r.name))
+		.map((r) => r.name)
+		.join(', ');
+
+	logger.info(filteredRecordsString, 'Get DNS Records');
 	return records;
 }
 
@@ -38,12 +37,7 @@ async function updateDNSRecord(record: Record, publicIp: string) {
 	});
 
 	const newRecord = updatedDNSRecordSchema.parse(res.data);
-	log({
-		status: 'SUCCESS',
-		function: 'updateDNSRecord',
-		record: newRecord.name,
-		data: newRecord,
-	});
+	logger.info(newRecord.toString(), `Update DNS Record ${newRecord.name}`);
 }
 
 async function createDNSRecord(name: string, value: string) {
@@ -55,7 +49,7 @@ async function createDNSRecord(name: string, value: string) {
 	});
 
 	const record = createdDNSRecord.parse(res.data);
-	log({ status: 'SUCCESS', function: 'createDNSRecord', data: record });
+	logger.info(record.toString(), 'Create DNS Record');
 	return record;
 }
 
@@ -70,11 +64,7 @@ async function main() {
 			if (record && record.value !== publicIp) await retry(() => updateDNSRecord(record, publicIp));
 		});
 	} catch (error) {
-		log({
-			status: 'ERROR',
-			function: 'main',
-			error: 'Failed after 3 attempts, will try again in 30 min',
-		});
+		logger.error('Failed after 3 attempts, will try again in 30 min', 'Main');
 	}
 }
 

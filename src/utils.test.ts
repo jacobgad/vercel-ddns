@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { describe, it, expect } from 'vitest';
 import { retry } from './utils';
 
