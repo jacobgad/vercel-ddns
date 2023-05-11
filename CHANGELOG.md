@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.0](https://github.com/jacobgad/vercel-ddns/compare/v1.5.0...v1.6.0) (2023-05-11)
+
+
+### Features
+
+* :sparkles: switch to ptkdev-logger for logging ([3065c5b](https://github.com/jacobgad/vercel-ddns/commit/3065c5b022c3257384264dc35b926d9d2791288d))
+
 ## [1.5.0](https://github.com/jacobgad/vercel-ddns/compare/v1.4.2...v1.5.0) (2023-03-16)
 
 
