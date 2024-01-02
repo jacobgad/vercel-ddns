@@ -28,7 +28,7 @@ The above multiple subdomain example would match or create the following records
 - bar.example.com
 - \*.bar.example.com -> wildcard to forward any subdomain of bar.example.com
 
-To update the root domain add a leading comma to the subdomain comma separated string. 
+To update the root domain add a leading comma to the subdomain comma separated string.
 Example:
 
 - ", foo, bar" -> will update the root and subdomains foo and bar
