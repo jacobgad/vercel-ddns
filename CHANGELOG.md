@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.0](https://github.com/jacobgad/vercel-ddns/compare/v1.6.2...v1.7.0) (2024-01-02)
+
+
+### Features
+
+* :sparkles: make logging more clear, and fix vercel edge cases ([53af27a](https://github.com/jacobgad/vercel-ddns/commit/53af27a2a7f847d74f9d114189b09608d2cf0806))
+
 ## [1.6.2](https://github.com/jacobgad/vercel-ddns/compare/v1.6.1...v1.6.2) (2024-01-02)
 
 
