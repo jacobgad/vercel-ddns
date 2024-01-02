@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.1](https://github.com/jacobgad/vercel-ddns/compare/v1.7.0...v1.7.1) (2024-01-02)
+
+
+### Bug Fixes
+
+* :bug: fix base import compiler error ([0e2bd24](https://github.com/jacobgad/vercel-ddns/commit/0e2bd24b57360ead4268e6709d243a95c6d2c116))
+
 ## [1.7.0](https://github.com/jacobgad/vercel-ddns/compare/v1.6.2...v1.7.0) (2024-01-02)
 
 
