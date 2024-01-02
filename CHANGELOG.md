@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.2](https://github.com/jacobgad/vercel-ddns/compare/v1.6.1...v1.6.2) (2024-01-02)
+
+
+### Bug Fixes
+
+* :bug: format subdomains debug to be more clear ([4c71c51](https://github.com/jacobgad/vercel-ddns/commit/4c71c51314b62b0095de1822cab3f303d447e618))
+
 ## [1.6.1](https://github.com/jacobgad/vercel-ddns/compare/v1.6.0...v1.6.1) (2024-01-02)
 
 
