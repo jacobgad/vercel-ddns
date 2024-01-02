@@ -1,6 +1,6 @@
 import * as dotenv from 'dotenv';
-import { formatSubdomain } from 'utils/utils';
-import logger from './logger';
+import { formatSubdomain } from './utils/utils';
+import logger from './utils/logger';
 import { z } from 'zod';
 
 dotenv.config();

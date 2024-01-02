@@ -13,8 +13,7 @@
 		"isolatedModules": true,
 		"incremental": true,
 		"noUncheckedIndexedAccess": true,
-		"outDir": "./dist",
-		"baseUrl": "./src"
+		"outDir": "./dist"
 	},
 	"include": ["src/**/*.ts"],
 	"exclude": ["node_modules"]

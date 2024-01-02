@@ -2,9 +2,9 @@ import { createdDNSRecord, updatedDNSRecordSchema } from './schemas';
 import { formatSubdomain, retry } from './utils/utils';
 import type { Record } from './schemas';
 import env from './env';
-import logger from './logger';
+import logger from './utils/logger';
 import { recordSchema } from './schemas';
-import { vercelAxios } from 'utils/vercelAxios';
+import { vercelAxios } from './utils/vercelAxios';
 import { z } from 'zod';
 
 async function getPublicIp() {
