@@ -17,6 +17,9 @@ const env = envSchema.parse({
 }) satisfies z.infer<typeof envSchema>;
 
 logger.debug(env.domain, 'Domain');
-logger.debug(env.subdomains.toString(), 'Subdomains');
+logger.debug(
+	env.subdomains.map((string) => (string === '' ? 'ROOT' : string)).join(' | '),
+	'Subdomains',
+);
 
 export default env;
