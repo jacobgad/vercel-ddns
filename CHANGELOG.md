@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.1](https://github.com/jacobgad/vercel-ddns/compare/v1.6.0...v1.6.1) (2024-01-02)
+
+
+### Bug Fixes
+
+* :bug: update subdomain string validation to allow for root domain updating ([d92dea0](https://github.com/jacobgad/vercel-ddns/commit/d92dea0da50166c695f4f5eefeb62b99b69cfed3))
+
 ## [1.6.0](https://github.com/jacobgad/vercel-ddns/compare/v1.5.0...v1.6.0) (2023-05-11)
 
 
