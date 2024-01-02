@@ -1,6 +1,6 @@
 {
 	"name": "vercel-ddns",
-	"version": "1.6.0",
+	"version": "1.6.1",
 	"scripts": {
 		"dev": "tsx src/index.ts",
 		"build": "tsc",
