@@ -1,12 +1,9 @@
-import axios from 'axios';
-import env from './env';
-import logger from './logger';
+import logger from '../logger';
 
-export const vercelAxios = axios.create({
-	baseURL: 'https://api.vercel.com/',
-	timeout: 10000,
-	headers: { Authorization: `Bearer ${env.vercelApiKey}` },
-});
+export function formatSubdomain(string: string) {
+	if (string === '') return 'ROOT';
+	return string;
+}
 
 export function retry<T>(func: () => Promise<T>, maxAttempt = 3, currentAttempt = 1): Promise<T> {
 	return new Promise(async (resolve, reject) => {

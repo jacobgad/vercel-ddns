@@ -1,6 +1,7 @@
-import { z } from 'zod';
 import * as dotenv from 'dotenv';
+import { formatSubdomain } from 'utils/utils';
 import logger from './logger';
+import { z } from 'zod';
 
 dotenv.config();
 
@@ -17,9 +18,6 @@ const env = envSchema.parse({
 }) satisfies z.infer<typeof envSchema>;
 
 logger.debug(env.domain, 'Domain');
-logger.debug(
-	env.subdomains.map((string) => (string === '' ? 'ROOT' : string)).join(' | '),
-	'Subdomains',
-);
+logger.debug(env.subdomains.map((string) => formatSubdomain(string)).join(' | '), 'Subdomains');
 
 export default env;

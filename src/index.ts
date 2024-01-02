@@ -1,10 +1,11 @@
+import { createdDNSRecord, updatedDNSRecordSchema } from './schemas';
+import { formatSubdomain, retry } from './utils/utils';
 import type { Record } from './schemas';
-import { updatedDNSRecordSchema, createdDNSRecord } from './schemas';
-import { recordSchema } from './schemas';
-import { retry, vercelAxios } from './utils';
 import env from './env';
-import { z } from 'zod';
 import logger from './logger';
+import { recordSchema } from './schemas';
+import { vercelAxios } from 'utils/vercelAxios';
+import { z } from 'zod';
 
 async function getPublicIp() {
 	const res = await fetch('https://api.ipify.org');
@@ -17,14 +18,17 @@ async function getPublicIp() {
 
 async function getDNSRecords() {
 	const res = await vercelAxios.get(`v4/domains/${env.domain}/records`);
-	const records = z.array(recordSchema).parse(res.data.records);
+	const records = z
+		.array(recordSchema)
+		.parse(res.data.records)
+		.filter((record) => record.type === 'A');
 
-	const filteredRecordsString = records
+	const filteredRecordsNames = records
 		.filter((r) => env.subdomains.includes(r.name))
-		.map((r) => r.name)
-		.join(', ');
+		.map((r) => formatSubdomain(r.name));
+	const uniqueMatchingSubdomains = Array.from(new Set(filteredRecordsNames)).join(' | ');
 
-	logger.info(filteredRecordsString, 'Get DNS Records');
+	logger.info(uniqueMatchingSubdomains, 'Matching subdomains from vercel');
 	return records;
 }
 
@@ -37,7 +41,10 @@ async function updateDNSRecord(record: Record, publicIp: string) {
 	});
 
 	const newRecord = updatedDNSRecordSchema.parse(res.data);
-	logger.info(newRecord.toString(), `Update DNS Record ${newRecord.name}`);
+	logger.warning(
+		`${formatSubdomain(newRecord.name)} -> ${newRecord.value}`,
+		'Updated DNS A Record',
+	);
 }
 
 async function createDNSRecord(name: string, value: string) {
@@ -49,7 +56,7 @@ async function createDNSRecord(name: string, value: string) {
 	});
 
 	const record = createdDNSRecord.parse(res.data);
-	logger.info(record.toString(), 'Create DNS Record');
+	logger.warning(`${formatSubdomain(name)} -> ${value}`, 'Created DNS A Record');
 	return record;
 }
 
@@ -60,8 +67,10 @@ async function main() {
 
 		env.subdomains.forEach(async (subdomain) => {
 			const record = records?.find((record) => record.name === subdomain);
-			if (!record) await retry(() => createDNSRecord(subdomain, publicIp));
-			if (record && record.value !== publicIp) await retry(() => updateDNSRecord(record, publicIp));
+			if (!record) return await retry(() => createDNSRecord(subdomain, publicIp));
+			if (record.value === publicIp)
+				return logger.info(formatSubdomain(subdomain), 'No update needed');
+			return await retry(() => updateDNSRecord(record, publicIp));
 		});
 	} catch (error) {
 		logger.error('Failed after 3 attempts, will try again in 30 min', 'Main');

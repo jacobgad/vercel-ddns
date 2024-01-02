@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest';
-import { retry } from './utils';
+import { describe, expect, it } from 'vitest';
+import { retry } from './utils/utils';
 
 describe('Retry async function logic', () => {
 	function getValue(success = true) {
